@@ -1,6 +1,10 @@
 /*
-David Muñoz Zavala - 621613
-*/ 
+Ingeniería en Tecnologías Computacionales
+Análisis y Diseño de Algoritmos
+Pablo Flores 611194
+David Muñoz 621613
+19 de agosto, 2025
+*/
 
 
 #include <iostream> 
