@@ -1,6 +1,6 @@
 /*
 Pablo Flores 611194
-David Muñoz
+David Muñoz 621613
 Ingeniería en Tecnologías Computacionales
 Análisis y Diseño de Algoritmos
 19 de agosto, 2025
@@ -20,6 +20,7 @@ int main(){
         cout << arr[x] << " ";
     } 
 
+    //se ejecuta el bucle 8 veces
     for(int i=0; i < 9 - 1; i++){
         for (int j=0; j < 9 - i - 1; j++){
             if(arr[j] > arr[j+1]){
