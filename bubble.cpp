@@ -25,6 +25,7 @@ int main(){
     for(int i=0; i < 9 - 1; i++){
         //se recorre el bucle cada vez menos porque la ultima posición ya es correcta
         for (int j=0; j < 9 - i - 1; j++){
+            //en caso de que la posición j tenga un valor mayor a la de su vecino, intercambian valores.
             if(arr[j] > arr[j+1]){
                 temp = arr[j];
                 arr[j] = arr[j +1];
