@@ -19,7 +19,7 @@ int main(){
     for(int i = 0; i < n; i++){ // for para ir recorriendo el arreglo
         actual = i; //asignamos la variable en la posicion i a actual
         for(int j = i+1; j < n; j++){ // for anidado donde se recorrerán las otras posiciones del arreglo
-            if(arreglo[j] < arreglo[actual]){ // si el número en la posición j es menor que el número actual guardado, se asigna el número menor
+            if(arreglo[j] < arreglo[i]){ // si el número en la posición j es menor que el número actual guardado, se asigna el número menor
                 actual = j;
             }
         }
