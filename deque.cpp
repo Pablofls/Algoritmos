@@ -1,3 +1,12 @@
+/*
+Ingeniería en Tecnologías Computacionales
+Análisis y Diseño de Algoritmos
+Pablo Flores 611194
+David Muñoz 621613
+26 de agosto, 2025
+Fuente: https://en.cppreference.com/w/cpp/container/deque.html
+*/
+
 #include <iostream>
 #include <deque>
 using namespace std;
