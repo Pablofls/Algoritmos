@@ -1,3 +1,11 @@
+/*
+Ingeniería en Tecnologías Computacionales
+Análisis y Diseño de Algoritmos
+Pablo Flores 611194
+David Muñoz 621613
+27 de agosto, 2025
+*/
+
 #include <iostream>
 using namespace std;
 
@@ -21,5 +29,12 @@ int main(){
     cout << multiplicando << " por " << multiplicador << " es: " << multiplicar_recursivo(multiplicando,multiplicador);
 
 
-
 }
+
+/*
+Complejidad temporal:
+Complejidad espacial:
+
+
+Nosotros damos nuestra palabra que hemos realizado esta actividad con integridad académica.
+*/
