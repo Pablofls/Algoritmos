@@ -103,13 +103,20 @@ void mergesort(int arr[], int lowestV, int highestV){
 
 int main(){
     int arr[5] = {98, 45, 28, 1, 67};
+
+    cout << "Arreglo sin ordenar: \n";
+    for(int i=0; i < 5; i++){
+        cout << arr[i] << " ";
+    }
+
     int size = sizeof(arr) / sizeof(arr[0]);
 
     int lowestV = 0;
     int highestV = size - 1;
 
     mergesort(arr, lowestV, highestV);
-
+    
+    cout << "\nArreglo ordenado: \n";
     for(int i=0; i < 5; i++){
         cout << arr[i] << " ";
     }
