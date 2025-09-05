@@ -5,8 +5,12 @@ Pablo Flores 611194
 David Muñoz 621613
 8 de septiembre, 2025
 */
+#include <iostream>
+using namespace std;
 
+int main(){
 
+}
 /*
 Complejidad temporal: O(n), siendo n el multiplicador, por lo que se repetirá la suma n número de veces.
 Complejidad espacial: También es O(n), ya que el espacio usado es proporcional al número de veces que se llama a la función recursiva.
