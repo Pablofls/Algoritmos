@@ -41,27 +41,33 @@ int getMinInt(vector<int>& number){
     return minNum;
 }
 
-int kaprekar(int maxNum, int minNum){
-    int result = 0;
+void kaprekar(int maxNum, int minNum){
+    int intResult = 0;
     string strResult;
-    while(result != 6174){
-        result = maxNum - minNum;
-        strResult = to_string(result);
+    vector <int> arrResult;
+    while(intResult != 6174){
+        intResult = maxNum - minNum;
+
+        cout << maxNum << " - " << minNum << " = " << intResult << endl;
+        strResult = to_string(intResult);
+
+        convertToArray(arrResult, strResult);
+        maxNum = getMaxInt(arrResult);
+        minNum = getMinInt(arrResult);
     }
 }
 
 int main(){
-    string prueba = "3214";
+    string prueba = "2010";
     vector <int>number;
     int maxNum;
     int minNum;
 
     convertToArray(number, prueba);
-
     maxNum = getMaxInt(number);
     minNum = getMinInt(number);
 
-    cout << maxNum << " - " << minNum;
+    kaprekar(maxNum, minNum);
 
     return 0;
 }
