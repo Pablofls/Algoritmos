@@ -12,6 +12,14 @@ David Muñoz 621613
 using namespace std;
 
 
+void convertToArray(vector<int>&number, string stringNum){
+    
+    for(int i=0; i<stringNum.size(); i++){
+        number.push_back(stringNum[i] - '0');
+    }
+}
+
+
 
 //Convert the array of integers into the biggest integer possible
 int getMaxInt(vector<int>& number){
@@ -23,16 +31,37 @@ int getMaxInt(vector<int>& number){
     return maxNum;
 }
 
+//Convert the array of interegs into the smallest interger possible
+int getMinInt(vector<int>& number){
+    int minNum;
+    sort(number.begin(), number.end());
+
+    minNum = (number[0] * 1000) + (number[1] * 100) + (number[2] * 10) + number[3];
+    
+    return minNum;
+}
+
+int kaprekar(int maxNum, int minNum){
+    int result = 0;
+    string strResult;
+    while(result != 6174){
+        result = maxNum - minNum;
+        strResult = to_string(result);
+    }
+}
+
 int main(){
     string prueba = "3214";
     vector <int>number;
     int maxNum;
+    int minNum;
 
-    for(int i=0; i<prueba.size(); i++){
-        number.push_back(prueba[i] - '0');
-    }
+    convertToArray(number, prueba);
 
-    maxNum = getMaxInt(number)
+    maxNum = getMaxInt(number);
+    minNum = getMinInt(number);
+
+    cout << maxNum << " - " << minNum;
 
     return 0;
 }
