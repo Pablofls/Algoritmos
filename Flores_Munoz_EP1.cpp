@@ -27,6 +27,9 @@ int getMaxInt(vector<int>& number){
     sort(number.begin(), number.end(), greater<int>());
 
     maxNum = (number[0] * 1000) + (number[1] * 100) + (number[2] * 10) + number[3];
+
+    if (maxNum < 999)
+        maxNum *= 1000;
     
     return maxNum;
 }
@@ -45,6 +48,7 @@ void kaprekar(int maxNum, int minNum){
     int intResult = 0;
     string strResult;
     vector <int> arrResult;
+
     while(intResult != 6174){
         intResult = maxNum - minNum;
 
@@ -54,11 +58,15 @@ void kaprekar(int maxNum, int minNum){
         convertToArray(arrResult, strResult);
         maxNum = getMaxInt(arrResult);
         minNum = getMinInt(arrResult);
+
+        arrResult.clear();
     }
 }
 
+
+
 int main(){
-    string prueba = "2010";
+    string prueba = "1000";
     vector <int>number;
     int maxNum;
     int minNum;
