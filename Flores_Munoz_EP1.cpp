@@ -11,7 +11,7 @@ David Muñoz 621613
 #include <vector>
 using namespace std;
 
-//Recives an string that is converted into an array of integers
+//Receives an string that is converted into an array of integers
 void convertToArray(vector<int>&number, string stringNum){
     
     for(int i=0; i<stringNum.size(); i++){
@@ -32,7 +32,7 @@ int getMaxInt(vector<int>& number){
     return maxNum;
 }
 
-//Convert the array of interegs into the smallest interger possible
+//Convert the array of interegs into the smallest integer possible
 int getMinInt(vector<int>& number){
     int minNum;
     sort(number.begin(), number.end());
@@ -42,26 +42,26 @@ int getMinInt(vector<int>& number){
     return minNum;
 }
 
-//Find the kaprekar number by receiving the max number possible and the min number possible of a 4 digit integer
+//Finds the kaprekar number by receiving the max number possible and the min number possible of a 4 digit integer
 void kaprekar(int maxNum, int minNum){
     int intResult = 0;
     int iterations = 0;
     string strResult;
     vector <int> arrResult;
 
-// subtract the max num and min number of a 4 digit integer until the result is the kaprekar number.
+// Calculates the diference between the max num and min number of a 4 digit integer until the result is the kaprekar number, while the result is not the kaprekar number.
     while(intResult != 6174){
         intResult = maxNum - minNum;
 
         cout << maxNum << " - " << minNum << " = " << intResult << endl;
         strResult = to_string(intResult);
 
-        //Make sure to have a 4 digit number.
+        //Makes sure to have a 4 digit number.
         while(strResult.size() < 4){
             strResult = "0" + strResult;
         }        
 
-        //turn the result into an array to repeat the process.
+        //turns the result into an array to repeat the process.
         convertToArray(arrResult, strResult);
         maxNum = getMaxInt(arrResult);
         minNum = getMinInt(arrResult);
@@ -73,14 +73,14 @@ void kaprekar(int maxNum, int minNum){
     cout << "Iterations: " << iterations << endl;
 }
 
-
+//Finds the max number iterations by going through all four digit numbers
 void maxKaprekar(){
     int maxIterations = 0;
     vector <int> arrMaxIter;
 
     for(int n = 1000; n <= 9998; n++){
         string input = to_string(n);
-
+        //verifies that the digits of the number are not all the same. For example: 1111, 2222, 3333...
         if(input[0] == input[1] && input[0] == input[2] && input[0] == input[3]){
             n += 1;
             input = to_string(n);
@@ -91,7 +91,7 @@ void maxKaprekar(){
         int maxNum;
         int minNum;
 
-
+        //turns the result into an array to repeat the process.
         convertToArray(number, input);
         maxNum = getMaxInt(number);
         minNum = getMinInt(number);
@@ -102,6 +102,7 @@ void maxKaprekar(){
         string strResult;
         vector <int> arrResult;
 
+        // Calculates the diference between the max num and min number of a 4 digit integer until the result is the kaprekar number, while the result is not the kaprekar number.
         while(intResult != 6174){
 
             intResult = maxNum - minNum;
@@ -120,6 +121,8 @@ void maxKaprekar(){
             arrResult.clear();
             
         }
+
+        // Stores the maximum number of iterations, and stores the numbers that have the most number of iterations in an array.
         if(iterations > maxIterations){
             maxIterations = iterations;
             arrMaxIter.clear();
@@ -152,10 +155,12 @@ int main(){
     cout << "Enter a 4 digit number: ";
     cin >> input;
 
+    // Calculates the max and min number of the four digit integer.
     convertToArray(number, input);
     maxNum = getMaxInt(number);
     minNum = getMinInt(number);
 
+    // Calculates the kaprekar number and the biggest number of iterations.
     kaprekar(maxNum, minNum);
     maxKaprekar();
 
@@ -163,9 +168,8 @@ int main(){
 }
 
 /*
-Complejidad temporal: 
-Complejidad espacial: 
+Time complexity: O(1) because of the worst case scenario, 7 is the maximum number of iterations no matter what is the input.
+Space complexity: O(1) because all the variables are overwritten in each iteration and the size of the array is always 4.
 
-
-Nosotros damos nuestra palabra que hemos realizado esta actividad con integridad académica.
+We hereby affirm that we have done this activity with academic integrity.
 */
