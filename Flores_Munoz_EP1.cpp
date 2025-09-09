@@ -1,9 +1,9 @@
 /*
-Ingeniería en Tecnologías Computacionales
-Análisis y Diseño de Algoritmos
+ITC
+Analysis and dessign of Algorithms
 Pablo Flores 611194
 David Muñoz 621613
-8 de septiembre, 2025
+September 9th, 2025
 */
 
 #include <iostream>
