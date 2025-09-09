@@ -84,7 +84,7 @@ int getFinal(int final, int max, int min, int count, vector<int>& arrayMin, vect
 }
 
 int main(){
-string number = "1111";
+string number = "1004";
 vector <int> arrayMax;
 vector <int> arrayMin;
 int mult1 = 1000; 

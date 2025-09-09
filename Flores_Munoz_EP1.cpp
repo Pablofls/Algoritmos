@@ -28,7 +28,7 @@ int getMaxInt(vector<int>& number){
 
     maxNum = (number[0] * 1000) + (number[1] * 100) + (number[2] * 10) + number[3];
 
-    if (maxNum < 999)
+    if (maxNum <= 999)
         maxNum *= 1000;
     
     return maxNum;
@@ -40,6 +40,8 @@ int getMinInt(vector<int>& number){
     sort(number.begin(), number.end());
 
     minNum = (number[0] * 1000) + (number[1] * 100) + (number[2] * 10) + number[3];
+
+    //cout << "El numero minimo es: " << minNum << endl;
     
     return minNum;
 }
@@ -55,6 +57,10 @@ void kaprekar(int maxNum, int minNum){
         cout << maxNum << " - " << minNum << " = " << intResult << endl;
         strResult = to_string(intResult);
 
+        while(strResult.size() < 4){
+            strResult = "0" + strResult;
+        }        
+
         convertToArray(arrResult, strResult);
         maxNum = getMaxInt(arrResult);
         minNum = getMinInt(arrResult);
@@ -66,12 +72,15 @@ void kaprekar(int maxNum, int minNum){
 
 
 int main(){
-    string prueba = "1000";
+    string input;
     vector <int>number;
     int maxNum;
     int minNum;
 
-    convertToArray(number, prueba);
+    cout << "Enter a 4 digit number: ";
+    cin >> input;
+
+    convertToArray(number, input);
     maxNum = getMaxInt(number);
     minNum = getMinInt(number);
 
