@@ -11,7 +11,7 @@ David Muñoz 621613
 #include <vector>
 using namespace std;
 
-
+//Recives an string that is converted into an array.
 void convertToArray(vector<int>&number, string stringNum){
     
     for(int i=0; i<stringNum.size(); i++){
@@ -28,8 +28,6 @@ int getMaxInt(vector<int>& number){
 
     maxNum = (number[0] * 1000) + (number[1] * 100) + (number[2] * 10) + number[3];
 
-    if (maxNum <= 999)
-        maxNum *= 1000;
     
     return maxNum;
 }
@@ -48,6 +46,7 @@ int getMinInt(vector<int>& number){
 
 void kaprekar(int maxNum, int minNum){
     int intResult = 0;
+    int iterations = 0;
     string strResult;
     vector <int> arrResult;
 
@@ -65,8 +64,72 @@ void kaprekar(int maxNum, int minNum){
         maxNum = getMaxInt(arrResult);
         minNum = getMinInt(arrResult);
 
+        iterations += 1;
         arrResult.clear();
     }
+
+    cout << "Iterations: " << iterations << endl;
+}
+
+
+void maxKaprekar(){
+    int maxIterations = 0;
+    vector <int> arrMaxIter;
+
+    for(int n = 1000; n <= 2000; n++){
+        string input = to_string(n);
+
+        if(input[0] == input[1] || input[0] == input[2] || input[0] == input[3]){
+            n += 1;
+            input = to_string(n);
+        }
+            
+
+        vector <int>number;
+        int maxNum;
+        int minNum;
+
+
+        convertToArray(number, input);
+        maxNum = getMaxInt(number);
+        minNum = getMinInt(number);
+
+
+        int intResult = 0;
+        int iterations = 0;
+        string strResult;
+        vector <int> arrResult;
+
+        while(intResult != 6174){
+
+            intResult = maxNum - minNum;
+
+            strResult = to_string(intResult);
+
+            while(strResult.size() < 4){
+                strResult = "0" + strResult;
+            }        
+
+            convertToArray(arrResult, strResult);
+            maxNum = getMaxInt(arrResult);
+            minNum = getMinInt(arrResult);
+
+            iterations += 1;
+            arrResult.clear();
+            
+        }
+
+        if (iterations > maxIterations)
+            arrMaxIter.clear();
+            maxIterations = iterations;
+        
+        if (iterations == maxIterations)
+            arrMaxIter.push_back(n);
+        
+    }
+    cout << endl << "Max number of iterations: " << maxIterations << endl << "By the numbers: \n";
+    for(int i=0; i<arrMaxIter.size(); i++)
+        cout << arrMaxIter[i] << endl;
 }
 
 
@@ -85,12 +148,13 @@ int main(){
     minNum = getMinInt(number);
 
     kaprekar(maxNum, minNum);
+    maxKaprekar();
 
     return 0;
 }
 /*
-Complejidad temporal: O(n), siendo n el multiplicador, por lo que se repetirá la suma n número de veces.
-Complejidad espacial: También es O(n), ya que el espacio usado es proporcional al número de veces que se llama a la función recursiva.
+Complejidad temporal: 
+Complejidad espacial: 
 
 
 Nosotros damos nuestra palabra que hemos realizado esta actividad con integridad académica.
