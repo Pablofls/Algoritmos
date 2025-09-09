@@ -11,7 +11,7 @@ David Muñoz 621613
 #include <vector>
 using namespace std;
 
-//Recives an string that is converted into an array.
+//Recives an string that is converted into an array of integers
 void convertToArray(vector<int>&number, string stringNum){
     
     for(int i=0; i<stringNum.size(); i++){
@@ -38,28 +38,30 @@ int getMinInt(vector<int>& number){
     sort(number.begin(), number.end());
 
     minNum = (number[0] * 1000) + (number[1] * 100) + (number[2] * 10) + number[3];
-
-    //cout << "El numero minimo es: " << minNum << endl;
     
     return minNum;
 }
 
+//Find the kaprekar number by receiving the max number possible and the min number possible of a 4 digit integer
 void kaprekar(int maxNum, int minNum){
     int intResult = 0;
     int iterations = 0;
     string strResult;
     vector <int> arrResult;
 
+// subtract the max num and min number of a 4 digit integer until the result is the kaprekar number.
     while(intResult != 6174){
         intResult = maxNum - minNum;
 
         cout << maxNum << " - " << minNum << " = " << intResult << endl;
         strResult = to_string(intResult);
 
+        //Make sure to have a 4 digit number.
         while(strResult.size() < 4){
             strResult = "0" + strResult;
         }        
 
+        //turn the result into an array to repeat the process.
         convertToArray(arrResult, strResult);
         maxNum = getMaxInt(arrResult);
         minNum = getMinInt(arrResult);
@@ -76,10 +78,10 @@ void maxKaprekar(){
     int maxIterations = 0;
     vector <int> arrMaxIter;
 
-    for(int n = 1000; n <= 2000; n++){
+    for(int n = 1000; n <= 9998; n++){
         string input = to_string(n);
 
-        if(input[0] == input[1] || input[0] == input[2] || input[0] == input[3]){
+        if(input[0] == input[1] && input[0] == input[2] && input[0] == input[3]){
             n += 1;
             input = to_string(n);
         }
@@ -118,18 +120,25 @@ void maxKaprekar(){
             arrResult.clear();
             
         }
-
-        if (iterations > maxIterations)
-            arrMaxIter.clear();
+        if(iterations > maxIterations){
             maxIterations = iterations;
-        
-        if (iterations == maxIterations)
+            arrMaxIter.clear();
             arrMaxIter.push_back(n);
+        }else if( iterations == maxIterations){
+            arrMaxIter.push_back(n);
+        }
         
     }
-    cout << endl << "Max number of iterations: " << maxIterations << endl << "By the numbers: \n";
-    for(int i=0; i<arrMaxIter.size(); i++)
+
+    cout << endl << "Max iterations: " << maxIterations;
+
+    // Show all the numbers that give the max amount of iterations.
+    /*
+    cout << endl << "By the numbers: \n";
+    for(int i=0; i < arrMaxIter.size(); i++)
         cout << arrMaxIter[i] << endl;
+    */
+    
 }
 
 
@@ -152,6 +161,7 @@ int main(){
 
     return 0;
 }
+
 /*
 Complejidad temporal: 
 Complejidad espacial: 
