@@ -44,6 +44,7 @@ int main(){
 
     getTwoSum(nums,target);
 
+    return 0;
 }
 
 
