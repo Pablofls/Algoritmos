@@ -43,7 +43,7 @@ int SecondCondition(int (&img)[20][20], int i, int j){
         counter ++;
 
     //Pfour and Pfive
-    if(img[i][l+1] == 0 && img[i+1][j+1] == 1)
+    if(img[i][j+1] == 0 && img[i+1][j+1] == 1)
         counter ++;
 
     //Pfive and Psix
@@ -68,6 +68,28 @@ int SecondCondition(int (&img)[20][20], int i, int j){
         return 0;
     }
 
+
+}
+
+int ThirdCondition(int (&img)[20][20], int i, int j){
+    int mult = 0;
+    //.     P2 north        P4 west      P6 south
+    mult = img[i-1][j] * img[i][j+1] *img[i][j-1];
+    if (mult == 0){
+        return 1;
+    } else {
+        return 0;
+    }
+}
+
+int FourthCondition(int (&img)[20][20], int i, int j){
+    int mult2=0;
+    mult2 = img[i][j-1] * img[i][j+1] * img[i+1][j];
+    if (mult2 == 0){
+        return 1;
+    } else {
+        return 0;
+    }
 
 }
 
