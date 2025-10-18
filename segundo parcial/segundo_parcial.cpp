@@ -10,8 +10,16 @@ October 21st, 2025
 #include <fstream>
 using namespace std;
 
+/*
+MATRIX VISUALIZATION
+img[i-1][j-1] | img[i-1][j] | img[i-1][j+1]
+img[i][j-1]   | img[i][j]   | img[i][j+1]  
+img[i+1][j-1] | img[i+1][j] | img[i+1][j+1]
+*/
+
+//Sum the values around the analyzed pixel if the value is between 2 and 6 return true.
 int FirstCondition(int (&img)[20][20], int i, int j){
-    int result;
+    int result = 0;
     result = img[i-1][j-1] + img[i-1][j] + img[i-1][j+1]+
              img[i][j-1]        +          img[i][j+1]  +
              img[i+1][j-1] + img[i+1][j] + img[i+1][j+1];
@@ -21,6 +29,46 @@ int FirstCondition(int (&img)[20][20], int i, int j){
     }else{
         return 0;
     }
+}
+
+//search for the 0,1 pattern. In case there is more than 1 pattern return false.
+int SecondCondition(int (&img)[20][20], int i, int j){
+    int counter = 0;
+    //Ptwo and Pthree
+    if(img[i-1][j] == 0 && img[i-1][j+1] == 1)
+        counter ++;
+
+    //Pthree and Pfour
+    if(img[i-1][j+1] == 0 && img[i][j+1] == 1)
+        counter ++;
+
+    //Pfour and Pfive
+    if(img[i][l+1] == 0 && img[i+1][j+1] == 1)
+        counter ++;
+
+    //Pfive and Psix
+    if(img[i+1][j+1] == 0 && img[i+1][j] == 1)
+        counter ++;
+
+    //Psix and Pseven
+    if(img[i+1][j] == 0 && img[i+1][j-1] == 1)
+        counter ++;
+
+    //Pseven and Peight
+    if(img[i+1][j-1] == 0 && img[i][j-1] == 1)
+        counter ++;
+
+    //Peight and Pnine
+    if(img[i][j-1] == 0 && img[i-1][j-1] == 1)
+        counter ++;
+
+    if(counter == 1){
+        return 1;
+    }else{
+        return 0;
+    }
+
+
 }
 
 void printImg(int img[20][20], ofstream &output){
