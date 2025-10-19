@@ -18,7 +18,7 @@ img[i+1][j-1] | img[i+1][j] | img[i+1][j+1]
 */
 
 //Sum the values around the analyzed pixel if the value is between 2 and 6 return true.
-int FirstCondition(int (&img)[20][20], int i, int j){
+int FirstConditionGlobal(int (&img)[20][20], int i, int j){
     int result = 0;
     result = img[i-1][j-1] + img[i-1][j] + img[i-1][j+1]+
              img[i][j-1]        +          img[i][j+1]  +
@@ -32,33 +32,34 @@ int FirstCondition(int (&img)[20][20], int i, int j){
 }
 
 //search for the 0,1 pattern. In case there is more than 1 pattern return false.
-int SecondCondition(int (&img)[20][20], int i, int j){
+int SecondConditionGlobal(int (&img)[20][20], int i, int j){
     int counter = 0;
-    //Ptwo and Pthree
+
+    //P2 and P3
     if(img[i-1][j] == 0 && img[i-1][j+1] == 1)
         counter ++;
 
-    //Pthree and Pfour
+    //P3 and P4
     if(img[i-1][j+1] == 0 && img[i][j+1] == 1)
         counter ++;
 
-    //Pfour and Pfive
+    //P4 and P5
     if(img[i][l+1] == 0 && img[i+1][j+1] == 1)
         counter ++;
 
-    //Pfive and Psix
+    //P5 and P6
     if(img[i+1][j+1] == 0 && img[i+1][j] == 1)
         counter ++;
 
-    //Psix and Pseven
+    //P6 and P7
     if(img[i+1][j] == 0 && img[i+1][j-1] == 1)
         counter ++;
 
-    //Pseven and Peight
+    //P7 and P8
     if(img[i+1][j-1] == 0 && img[i][j-1] == 1)
         counter ++;
 
-    //Peight and Pnine
+    //P8 and P9
     if(img[i][j-1] == 0 && img[i-1][j-1] == 1)
         counter ++;
 
@@ -67,7 +68,23 @@ int SecondCondition(int (&img)[20][20], int i, int j){
     }else{
         return 0;
     }
+}
 
+//P2 * P4 * P6 = 0
+int ThirdConditionFP(int (&img)[20][20], int i, int j){
+    if(img[][])
+
+}
+
+int FourthConfitionFP(int (&img)[20][20], int i, int j){
+
+}
+
+int ThirdConditionSP(int (&img)[20][20], int i, int j){
+
+}
+
+int FourthConditionSP(int (&img)[20][20], int i, int j){
 
 }
 
