@@ -72,19 +72,38 @@ int SecondConditionGlobal(int (&img)[20][20], int i, int j){
 
 //P2 * P4 * P6 = 0
 int ThirdConditionFP(int (&img)[20][20], int i, int j){
-    if(img[][])
+    if(img[i-1][j] * img[i][j+1] * img[i+1][j] == 0){
+        return 1;
+    } else{
+        return 0;
+    }
 
 }
 
 int FourthConfitionFP(int (&img)[20][20], int i, int j){
+    if(img[i][j+1] * img[i][j-1] * img[i+1][j] == 0){
+        return 1;
+    } else{
+        return 0;
+    }
 
 }
 
 int ThirdConditionSP(int (&img)[20][20], int i, int j){
+    if(img[i-1][j] * img[i][j+1] * img[i][j-1] == 0){
+        return 1;
+    } else{
+        return 0;
+    }
 
 }
 
 int FourthConditionSP(int (&img)[20][20], int i, int j){
+    if(img[i-1][j] * img[i+1][j] * img[i][j-1] == 0){
+        return 1;
+    } else{
+        return 0;
+    }
 
 }
 
