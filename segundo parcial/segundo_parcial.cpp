@@ -115,7 +115,7 @@ int FourthConditionSP(int (&img)[20][20], int i, int j, int &count){
 
 int thinningUp(int (&img)[20][20], int i, int j, int &count, int done1){
     for(int i = 1; i < 20; i++){
-        for(int j = 1; j < 20; j++){
+        for(int j = 1; j < 19; j++){
             FirstConditionGlobal(img,i,j,count);
             SecondConditionGlobal(img,i,j,count);
             ThirdConditionSP(img,i,j,count);
@@ -129,7 +129,7 @@ int thinningUp(int (&img)[20][20], int i, int j, int &count, int done1){
 }
 
 int thinningDown(int (&img)[20][20], int i, int j, int &count, int done2){
-    for(int i = 1; i < 20; i++){
+    for(int i = 1; i < 19; i++){
         for(int j = 1; j < 20; j++){
             FirstConditionGlobal(img,i,j,count);
             SecondConditionGlobal(img,i,j,count);
