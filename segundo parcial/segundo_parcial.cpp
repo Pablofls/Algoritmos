@@ -18,13 +18,14 @@ img[i+1][j-1] | img[i+1][j] | img[i+1][j+1]
 */
 
 //Sum the values around the analyzed pixel if the value is between 2 and 6 return true.
-int FirstConditionGlobal(int (&img)[20][20], int i, int j){
+int FirstConditionGlobal(int (&img)[20][20], int i, int j, int &count){
     int result = 0;
     result = img[i-1][j-1] + img[i-1][j] + img[i-1][j+1]+
              img[i][j-1]        +          img[i][j+1]  +
              img[i+1][j-1] + img[i+1][j] + img[i+1][j+1];
     
     if(2<= result && result <= 6){
+        count++;
         return 1;
     }else{
         return 0;
@@ -32,7 +33,7 @@ int FirstConditionGlobal(int (&img)[20][20], int i, int j){
 }
 
 //search for the 0,1 pattern. In case there is more than 1 pattern return false.
-int SecondConditionGlobal(int (&img)[20][20], int i, int j){
+int SecondConditionGlobal(int (&img)[20][20], int i, int j, int &count){
     int counter = 0;
 
     //P2 and P3
@@ -44,7 +45,7 @@ int SecondConditionGlobal(int (&img)[20][20], int i, int j){
         counter ++;
 
     //P4 and P5
-    if(img[i][l+1] == 0 && img[i+1][j+1] == 1)
+    if(img[i][j+1] == 0 && img[i+1][j+1] == 1)
         counter ++;
 
     //P5 and P6
@@ -64,6 +65,7 @@ int SecondConditionGlobal(int (&img)[20][20], int i, int j){
         counter ++;
 
     if(counter == 1){
+        count++;
         return 1;
     }else{
         return 0;
@@ -71,8 +73,9 @@ int SecondConditionGlobal(int (&img)[20][20], int i, int j){
 }
 
 //P2 * P4 * P6 = 0
-int ThirdConditionFP(int (&img)[20][20], int i, int j){
+int ThirdConditionFP(int (&img)[20][20], int i, int j, int &count){
     if(img[i-1][j] * img[i][j+1] * img[i+1][j] == 0){
+        count++;
         return 1;
     } else{
         return 0;
@@ -80,8 +83,9 @@ int ThirdConditionFP(int (&img)[20][20], int i, int j){
 
 }
 
-int FourthConfitionFP(int (&img)[20][20], int i, int j){
+int FourthConfitionFP(int (&img)[20][20], int i, int j, int &count){
     if(img[i][j+1] * img[i][j-1] * img[i+1][j] == 0){
+        count++;
         return 1;
     } else{
         return 0;
@@ -89,8 +93,9 @@ int FourthConfitionFP(int (&img)[20][20], int i, int j){
 
 }
 
-int ThirdConditionSP(int (&img)[20][20], int i, int j){
+int ThirdConditionSP(int (&img)[20][20], int i, int j, int &count){
     if(img[i-1][j] * img[i][j+1] * img[i][j-1] == 0){
+        count++;
         return 1;
     } else{
         return 0;
@@ -98,12 +103,52 @@ int ThirdConditionSP(int (&img)[20][20], int i, int j){
 
 }
 
-int FourthConditionSP(int (&img)[20][20], int i, int j){
+int FourthConditionSP(int (&img)[20][20], int i, int j, int &count){
     if(img[i-1][j] * img[i+1][j] * img[i][j-1] == 0){
+        count++;
         return 1;
     } else{
         return 0;
     }
+
+}
+
+int thinningUp(int (&img)[20][20], int i, int j, int &count, int done1){
+    for(int i = 1; i < 20; i++){
+        for(int j = 1; j < 20; j++){
+            FirstConditionGlobal(img,i,j,count);
+            SecondConditionGlobal(img,i,j,count);
+            ThirdConditionSP(img,i,j,count);
+            FourthConditionSP(img,i,j,count);
+            if(count == 4){
+                img[i][j] = 0;
+                done1 = 1;
+            }
+        }
+    }
+}
+
+int thinningDown(int (&img)[20][20], int i, int j, int &count, int done2){
+    for(int i = 1; i < 20; i++){
+        for(int j = 1; j < 20; j++){
+            FirstConditionGlobal(img,i,j,count);
+            SecondConditionGlobal(img,i,j,count);
+            ThirdConditionSP(img,i,j,count);
+            FourthConditionSP(img,i,j,count);
+            if(count == 4){
+                img[i][j] = 0;
+                done2 = 1;
+            }
+        }
+    }
+}
+
+int recursiveThinning(int (&img)[20][20], int i, int j, int &count, int done1, int done2){
+    count = 0;
+    if( done1 or done2 == 1){
+        thinningUp(img, i, j, count, done1);
+        thinningDown(img, i, j, count, done2);
+    } 
 
 }
 
@@ -123,6 +168,9 @@ int main(){
     ifstream input("input.txt");
     int img[20][20];
     int imgSkeleton[20][20];
+    int count = 0;
+    int done1 = 1;
+    int done2 = 1;
 
     for(int i=0; i<20; i++){
         for(int j=0; j<20; j++){
