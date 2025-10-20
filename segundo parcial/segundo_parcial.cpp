@@ -18,14 +18,13 @@ img[i+1][j-1] | img[i+1][j] | img[i+1][j+1]
 */
 
 //Sum the values around the analyzed pixel if the value is between 2 and 6 return true.
-int FirstConditionGlobal(int (&img)[20][20], int i, int j, int &count){
+int FirstConditionGlobal(int (&img)[20][20], int i, int j){
     int result = 0;
     result = img[i-1][j-1] + img[i-1][j] + img[i-1][j+1]+
              img[i][j-1]        +          img[i][j+1]  +
              img[i+1][j-1] + img[i+1][j] + img[i+1][j+1];
     
     if(2<= result && result <= 6){
-        count++;
         return 1;
     }else{
         return 0;
@@ -33,7 +32,7 @@ int FirstConditionGlobal(int (&img)[20][20], int i, int j, int &count){
 }
 
 //search for the 0,1 pattern. In case there is more than 1 pattern return false.
-int SecondConditionGlobal(int (&img)[20][20], int i, int j, int &count){
+int SecondConditionGlobal(int (&img)[20][20], int i, int j){
     int counter = 0;
 
     //P2 and P3
@@ -65,7 +64,6 @@ int SecondConditionGlobal(int (&img)[20][20], int i, int j, int &count){
         counter ++;
 
     if(counter == 1){
-        count++;
         return 1;
     }else{
         return 0;
@@ -73,9 +71,8 @@ int SecondConditionGlobal(int (&img)[20][20], int i, int j, int &count){
 }
 
 //P2 * P4 * P6 = 0
-int ThirdConditionFP(int (&img)[20][20], int i, int j, int &count){
+int ThirdConditionFP(int (&img)[20][20], int i, int j){
     if(img[i-1][j] * img[i][j+1] * img[i+1][j] == 0){
-        count++;
         return 1;
     } else{
         return 0;
@@ -83,9 +80,8 @@ int ThirdConditionFP(int (&img)[20][20], int i, int j, int &count){
 
 }
 
-int FourthConfitionFP(int (&img)[20][20], int i, int j, int &count){
+int FourthConditionFP(int (&img)[20][20], int i, int j){
     if(img[i][j+1] * img[i][j-1] * img[i+1][j] == 0){
-        count++;
         return 1;
     } else{
         return 0;
@@ -93,9 +89,8 @@ int FourthConfitionFP(int (&img)[20][20], int i, int j, int &count){
 
 }
 
-int ThirdConditionSP(int (&img)[20][20], int i, int j, int &count){
+int ThirdConditionSP(int (&img)[20][20], int i, int j){
     if(img[i-1][j] * img[i][j+1] * img[i][j-1] == 0){
-        count++;
         return 1;
     } else{
         return 0;
@@ -103,9 +98,8 @@ int ThirdConditionSP(int (&img)[20][20], int i, int j, int &count){
 
 }
 
-int FourthConditionSP(int (&img)[20][20], int i, int j, int &count){
+int FourthConditionSP(int (&img)[20][20], int i, int j){
     if(img[i-1][j] * img[i+1][j] * img[i][j-1] == 0){
-        count++;
         return 1;
     } else{
         return 0;
@@ -113,43 +107,34 @@ int FourthConditionSP(int (&img)[20][20], int i, int j, int &count){
 
 }
 
-int thinningUp(int (&img)[20][20], int i, int j, int &count, int done1){
-    for(int i = 1; i < 20; i++){
-        for(int j = 1; j < 19; j++){
-            FirstConditionGlobal(img,i,j,count);
-            SecondConditionGlobal(img,i,j,count);
-            ThirdConditionSP(img,i,j,count);
-            FourthConditionSP(img,i,j,count);
-            if(count == 4){
-                img[i][j] = 0;
-                done1 = 1;
-            }
-        }
-    }
-}
-
-int thinningDown(int (&img)[20][20], int i, int j, int &count, int done2){
+void FirstPass(int (&img)[20][20]){
     for(int i = 1; i < 19; i++){
-        for(int j = 1; j < 20; j++){
-            FirstConditionGlobal(img,i,j,count);
-            SecondConditionGlobal(img,i,j,count);
-            ThirdConditionSP(img,i,j,count);
-            FourthConditionSP(img,i,j,count);
-            if(count == 4){
+        for(int j = 1; j < 19; j ++){
+            if(
+                FirstConditionGlobal(img,i,j) +
+                SecondConditionGlobal(img,i,j) +
+                ThirdConditionFP(img,i,j) +
+                FourthConditionFP(img,i,j) == 4
+            ){
                 img[i][j] = 0;
-                done2 = 1;
             }
         }
     }
 }
 
-int recursiveThinning(int (&img)[20][20], int i, int j, int &count, int done1, int done2){
-    count = 0;
-    if( done1 or done2 == 1){
-        thinningUp(img, i, j, count, done1);
-        thinningDown(img, i, j, count, done2);
-    } 
-
+void SecondPass(int (&img)[20][20]){
+    for(int i = 1; i < 19; i++){
+        for(int j = 1; j < 19; j ++){
+            if(
+                FirstConditionGlobal(img,i,j) +
+                SecondConditionGlobal(img,i,j) +
+                ThirdConditionSP(img,i,j) +
+                FourthConditionSP(img,i,j) == 4
+            ){
+                img[i][j] = 0;
+            }
+        }
+    }
 }
 
 void printImg(int img[20][20], ofstream &output){
@@ -165,12 +150,9 @@ void printImg(int img[20][20], ofstream &output){
 
 int main(){
     ofstream output("output.txt");
-    ifstream input("input.txt");
+    ifstream input("honda.txt");
     int img[20][20];
     int imgSkeleton[20][20];
-    int count = 0;
-    int done1 = 1;
-    int done2 = 1;
 
     for(int i=0; i<20; i++){
         for(int j=0; j<20; j++){
@@ -178,7 +160,8 @@ int main(){
         }
     }
 
-    
+    FirstPass(img);
+    SecondPass(img);
 
     printImg(img, output);
 
