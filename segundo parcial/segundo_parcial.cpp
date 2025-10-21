@@ -84,6 +84,7 @@ bool ThirdConditionFP(int (&img)[20][20], int i, int j){
 
 }
 
+//P4 * P8 * P6 = 0 
 bool FourthConditionFP(int (&img)[20][20], int i, int j){
     if(img[i][j+1] * img[i][j-1] * img[i+1][j] == 0){
         return true;
@@ -93,6 +94,7 @@ bool FourthConditionFP(int (&img)[20][20], int i, int j){
 
 }
 
+//P2 * P4 * P8 = 0
 bool ThirdConditionSP(int (&img)[20][20], int i, int j){
     if(img[i-1][j] * img[i][j+1] * img[i][j-1] == 0){
         return true;
@@ -102,6 +104,7 @@ bool ThirdConditionSP(int (&img)[20][20], int i, int j){
 
 }
 
+//P2 * P6 * P8 = 0
 bool FourthConditionSP(int (&img)[20][20], int i, int j){
     if(img[i-1][j] * img[i+1][j] * img[i][j-1] == 0){
         return true;
@@ -111,6 +114,7 @@ bool FourthConditionSP(int (&img)[20][20], int i, int j){
 
 }
 
+//Control function that calls the 4 condition of the first pass
 void FirstPass(int (&img)[20][20]){
     int imgSkeleton[20][20] = {0};
     for(int i = 1; i < 19; i++){
@@ -136,6 +140,7 @@ void FirstPass(int (&img)[20][20]){
     }
 }
 
+//Control function that calls the 4 condition of the second pass
 void SecondPass(int (&img)[20][20]){
     int imgSkeleton[20][20] = {0};
     for(int i = 1; i < 19; i++){
@@ -195,6 +200,14 @@ int main(){
 }
 
 /*
+
+Time Complexity
+Since we use a constat size of matrix de time complexity of the algorith will be O(2*M*N) ≈ O(MN), but since the size of M and N is contant, the algorithm is O(1)
+
+Space Complexity
+The space complexity in a general case will be O(MN), but since our matrix is a constat size, the space complexity is O(1)
+
+
 We hereby affirm that we have done this activity with academic integrity.
 
 Tobar, E. (2025). Algoritmo de Zhang. Scribd. https://es.scribd.com/document/376992567/Algoritmo-de-Zhang
