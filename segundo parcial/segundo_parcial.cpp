@@ -108,14 +108,24 @@ int FourthConditionSP(int (&img)[20][20], int i, int j){
 }
 
 void FirstPass(int (&img)[20][20]){
+    int imgSkeleton[20][20] = {0};
     for(int i = 1; i < 19; i++){
         for(int j = 1; j < 19; j ++){
-            if(
-                FirstConditionGlobal(img,i,j) +
-                SecondConditionGlobal(img,i,j) +
-                ThirdConditionFP(img,i,j) +
-                FourthConditionFP(img,i,j) == 4
-            ){
+            if(img[i][j] == 1){
+                if(
+                    FirstConditionGlobal(img,i,j) +
+                    SecondConditionGlobal(img,i,j) +
+                    ThirdConditionFP(img,i,j) +
+                    FourthConditionFP(img,i,j) == 4
+                ){
+                    imgSkeleton[i][j] = 1;
+                }
+            }
+        }
+    }
+    for(int i = 1; i<19; i++){
+        for(int j = 1; j<19; j++){
+            if(imgSkeleton[i][j] == 1){
                 img[i][j] = 0;
             }
         }
@@ -123,14 +133,24 @@ void FirstPass(int (&img)[20][20]){
 }
 
 void SecondPass(int (&img)[20][20]){
+    int imgSkeleton[20][20] = {0};
     for(int i = 1; i < 19; i++){
         for(int j = 1; j < 19; j ++){
-            if(
-                FirstConditionGlobal(img,i,j) +
-                SecondConditionGlobal(img,i,j) +
-                ThirdConditionSP(img,i,j) +
-                FourthConditionSP(img,i,j) == 4
-            ){
+            if(img[i][j] == 1){
+                if(
+                    FirstConditionGlobal(img,i,j) +
+                    SecondConditionGlobal(img,i,j) +
+                    ThirdConditionSP(img,i,j) +
+                    FourthConditionSP(img,i,j) == 4
+                ){
+                    imgSkeleton[i][j] = 1;
+                }
+            }
+        }
+    }
+    for(int i = 1; i<19; i++){
+        for(int j = 1; j<19; j++){
+            if(imgSkeleton[i][j] == 1){
                 img[i][j] = 0;
             }
         }
@@ -150,9 +170,9 @@ void printImg(int img[20][20], ofstream &output){
 
 int main(){
     ofstream output("output.txt");
-    ifstream input("honda.txt");
+    ifstream input("P.txt");
     int img[20][20];
-    int imgSkeleton[20][20];
+    int imgSkeleton[20][20] = {0};
 
     for(int i=0; i<20; i++){
         for(int j=0; j<20; j++){
