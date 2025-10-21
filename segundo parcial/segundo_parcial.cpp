@@ -8,6 +8,7 @@ October 21st, 2025
 
 #include <iostream>
 #include <fstream>
+#include <vector>
 using namespace std;
 
 /*
@@ -62,6 +63,9 @@ int SecondConditionGlobal(int (&img)[20][20], int i, int j){
     //P8 and P9
     if(img[i][j-1] == 0 && img[i-1][j-1] == 1)
         counter ++;
+    //P9 and P2    
+    if(img[i-1][j-1] == 0 && img[i-1][j]== 1)
+        counter ++;
 
     if(counter == 1){
         return 1;
@@ -107,54 +111,42 @@ int FourthConditionSP(int (&img)[20][20], int i, int j){
 
 }
 
-void FirstPass(int (&img)[20][20]){
-    int imgSkeleton[20][20] = {0};
+int thinningUp(int (&img)[20][20], vector<pair<int,int>>& pchange){
+    pchange.clear();
     for(int i = 1; i < 19; i++){
-        for(int j = 1; j < 19; j ++){
+        for(int j = 1; j < 19; j++){
             if(img[i][j] == 1){
-                if(
-                    FirstConditionGlobal(img,i,j) +
-                    SecondConditionGlobal(img,i,j) +
-                    ThirdConditionFP(img,i,j) +
-                    FourthConditionFP(img,i,j) == 4
-                ){
-                    imgSkeleton[i][j] = 1;
-                }
-            }
+                if(FirstConditionGlobal(img, i, j) == 1 && SecondConditionGlobal(img, i, j) == 1 && ThirdConditionFP(img, i, j) == 1 && FourthConditionFP(img,i,j) ==1){
+                    pchange.push_back({i,j});
+            }   }
         }
     }
-    for(int i = 1; i<19; i++){
-        for(int j = 1; j<19; j++){
-            if(imgSkeleton[i][j] == 1){
-                img[i][j] = 0;
-            }
-        }
+    if(pchange.empty()){
+        return 0;
     }
+    for(int i = 0; i < pchange.size(); i++){
+        img[pchange[i].first][pchange[i].second] = 0;
+    }
+    return 1;
 }
 
-void SecondPass(int (&img)[20][20]){
-    int imgSkeleton[20][20] = {0};
+int thinningDown(int (&img)[20][20], vector<pair<int,int>>& pchange){
+    pchange.clear();
     for(int i = 1; i < 19; i++){
-        for(int j = 1; j < 19; j ++){
+        for(int j = 1; j < 19; j++){
             if(img[i][j] == 1){
-                if(
-                    FirstConditionGlobal(img,i,j) +
-                    SecondConditionGlobal(img,i,j) +
-                    ThirdConditionSP(img,i,j) +
-                    FourthConditionSP(img,i,j) == 4
-                ){
-                    imgSkeleton[i][j] = 1;
-                }
-            }
+                if(FirstConditionGlobal(img, i, j) == 1 && SecondConditionGlobal(img, i, j) == 1 && ThirdConditionSP(img, i, j) == 1 && FourthConditionSP(img,i,j) ==1){
+                    pchange.push_back({i,j});
+            }   }
         }
     }
-    for(int i = 1; i<19; i++){
-        for(int j = 1; j<19; j++){
-            if(imgSkeleton[i][j] == 1){
-                img[i][j] = 0;
-            }
-        }
+    if(pchange.empty()){
+        return 0;
+    } 
+    for(int i = 0; i < pchange.size(); i++){
+        img[pchange[i].first][pchange[i].second] = 0;
     }
+    return 1;
 }
 
 void printImg(int img[20][20], ofstream &output){
@@ -172,7 +164,8 @@ int main(){
     ofstream output("output.txt");
     ifstream input("linea.txt");
     int img[20][20];
-    int imgSkeleton[20][20] = {0};
+    int imgSkeleton[20][20];
+    vector<pair<int,int>> pchange;
 
     for(int i=0; i<20; i++){
         for(int j=0; j<20; j++){
@@ -180,12 +173,16 @@ int main(){
         }
     }
 
-    FirstPass(img);
-    SecondPass(img);
-
-    printImg(img, output);
-
+    while (true)
+    {
+       int check1 = thinningUp(img, pchange);
+       int check2 = thinningDown(img, pchange);
+       if(check1 == 0 && check2 == 0){
+        break;
+       }
+    }
     
+    printImg(img, output);
 
     output.close();
     return 0;
