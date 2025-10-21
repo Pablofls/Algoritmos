@@ -170,7 +170,7 @@ void printImg(int img[20][20], ofstream &output){
 
 int main(){
     ofstream output("output.txt");
-    ifstream input("P.txt");
+    ifstream input("linea.txt");
     int img[20][20];
     int imgSkeleton[20][20] = {0};
 
