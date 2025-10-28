@@ -202,7 +202,7 @@ int main(){
 /*
 
 Time Complexity
-In a general case the algorithm will have a time complexity of O(2*M*N) ≈ O(MN), but since the size of M and N is contant, the algorithm is O(1)
+In a general case the algorithm will have a time complexity of O(2*M*N) ≈ O(MN), but since the size of M and N is constant, the algorithm is O(1)
 
 Space Complexity
 The space complexity in a general case will be O(MN), but since our matrix is a constat size, the space complexity is O(1)
