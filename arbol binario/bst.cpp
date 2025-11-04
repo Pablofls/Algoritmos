@@ -1,3 +1,14 @@
+/*
+Ingeniería en Tecnologías Computacionales
+Análisis y Diseño de Algoritmos
+Pablo Flores 611194
+David Muñoz 621613
+4 de Noviembre, 2025
+*/
+
+
+
+
 #include <iostream>
 #include <queue>
 #include <stack>
@@ -6,10 +17,8 @@
 using namespace std;
 
 #include "arbol.h"
-// ------------------ Clase Árbol Binario ------------------
 
 
-// ------------------ Programa Principal ------------------
 int main() {
     ArbolBinario arbol;
     int valores[] = {10, 5, 3, 7, 15, 12, 18};
@@ -36,3 +45,11 @@ int main() {
 
     return 0;
 }
+
+
+/*
+We hereby affirm that we have done this activity with academic integrity.
+
+References
+OpenAI. (2025). ChatGPT (versión GPT-5) [Modelo de lenguaje grande]. https://chat.openai.com/
+*/
