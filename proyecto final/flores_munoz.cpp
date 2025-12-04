@@ -57,14 +57,33 @@ void printMap(unordered_map<int, vector<int > >& classesGraph) {
     }
 }
 
+void degreeVector(unordered_map<int, vector<int > >& classesGraph,vector<pair <int, int > >& degrees){
+    int node, degree;
+    for (auto& element : classesGraph) {
+        node = element.first;
+        degree = element.second.size();
+        degrees.push_back(make_pair(node, degree));
+    }
+
+}
+
+void printDegrees(vector<pair <int, int > > degrees){
+     for (auto i : degrees)
+        cout << i.first << " " << i.second
+      	<< endl;
+
+}
+
+
 int main(){
 
     unordered_map<int, vector<int > > classesGraph;
+    vector<pair <int, int > > degrees;
 
-   readfile(classesGraph);
-   printMap(classesGraph);
-   
-//vector de pares que usa el id y el grado, sortear por grado
+    readfile(classesGraph);
+    printMap(classesGraph);
+    degreeVector(classesGraph,degrees);
+    printDegrees(degrees);
   
     return 0;
 }
@@ -73,7 +92,7 @@ int main(){
 /*
 We hereby affirm that we have done this activity with academic integrity.
 
-References
+Referenceselement
 std::unordered_map - cppreference.com. (2025). Cppreference.com. https://cppreference.com/w/cpp/container/unordered_map.html
 
 GeeksforGeeks. (2024, February 14). How to Store Vectors as Values in a Map? GeeksforGeeks. https://www.geeksforgeeks.org/cpp/how-to-store-vectors-as-values-in-map-in-cpp/
