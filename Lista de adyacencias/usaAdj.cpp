@@ -5,6 +5,7 @@ using namespace std;
 
 int main(){
     LinkedlistT<char> vertices;
+    
     vertices.addFirst('a');
     vertices.addLast('b');
     vertices.addLast('c');

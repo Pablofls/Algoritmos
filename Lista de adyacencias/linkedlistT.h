@@ -7,12 +7,11 @@ class LinkedlistT{
     private:
         int size;
         NodeVT<T> *head;
-        int isprocesado(T dato);
-
+        
         int table[20][4];
         void initTable(T from);
         void printTable(T from);
-        int DijkstraRun(T from);
+        
         
     public:
         LinkedlistT(){
@@ -33,21 +32,11 @@ class LinkedlistT{
         void updateAt(int index, T newData);
         bool insertAt(int index, T data);
         void insertAdj(T fromV, T toV);
-        void BFS(T dato);
-        void DFS(T dato);
-        void resetProcesado();
         void clear();
         void printGraph();
 
-        void Dijkstra(T from);
-
 
 };
-
-/*
-NodeT es NodeVT
-NodeLa es NodeT
-*/
 
 
 template <class T>
@@ -73,7 +62,6 @@ void LinkedlistT<T>::insertAdj(T fromV, T toV){
     
     }
 }
-
 
 template <class T>
 void LinkedlistT<T>::clear(){
@@ -171,7 +159,6 @@ bool LinkedlistT<T>::deleteAt(int index){
         }
 }
 
-
 template <class T>
 bool LinkedlistT<T>::deleteData(T data){
     NodeVT<T> *aux = head;
@@ -258,7 +245,7 @@ void LinkedlistT<T>::printGraph(){
         cout << aux->dato << endl;
 
         for(int i = 0; i < size; i++){
-            cout << aux->dato << " ";
+            cout << aux->dato << " -> ";
             auxA= aux->adj;
             while(auxA != nullptr){
                 cout << auxA->dato << " ";

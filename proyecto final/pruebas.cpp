@@ -18,13 +18,13 @@ December 5th, 2025
 using namespace std;
 
 void readfile(unordered_map<int, vector<int> >& classesGraph){
-
     ifstream relations("conflictos.csv");
+
     string line, sOrigin, sDestiny;
     int origin, destiny;
-
     getline(relations,line); //read the header of the csv file
     
+
     if(relations.is_open()){
         while(getline(relations,line)){
             stringstream ss(line); //stringstream is used to handle the string
@@ -62,9 +62,12 @@ int main(){
     unordered_map<int, vector<int > > classesGraph;
 
    readfile(classesGraph);
+
+   
+
    printMap(classesGraph);
    
-//vector de pares que usa el id y el grado, sortear por grado
+
   
     return 0;
 }
@@ -79,9 +82,5 @@ std::unordered_map - cppreference.com. (2025). Cppreference.com. https://cpprefe
 GeeksforGeeks. (2024, February 14). How to Store Vectors as Values in a Map? GeeksforGeeks. https://www.geeksforgeeks.org/cpp/how-to-store-vectors-as-values-in-map-in-cpp/
 
 C++ File Handling Read and Write to Csv Files - Kenny Yip Coding(2025). Youtube.com. https://www.youtube.com/watch?v=LfiQj_X-pkA
-
-GeeksforGeeks. (2024, February 19). How to Create a Vector of Pairs in C++? GeeksforGeeks. https://www.geeksforgeeks.org/cpp/how-to-create-vector-of-pairs-in-cpp/
-
-‌
 
 */
