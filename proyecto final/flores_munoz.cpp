@@ -11,6 +11,7 @@ December 5th, 2025
 #include <unordered_map>
 #include <vector>
 
+
 #include <iostream>
 #include <fstream>
 #include <sstream>
@@ -83,6 +84,11 @@ int main(){
     readfile(classesGraph);
     printMap(classesGraph);
     degreeVector(classesGraph,degrees);
+
+    sort(degrees.begin(), degrees.end(), [](const pair<int,int>& a, const pair<int,int>& b){
+        return a.second > b.second; 
+    });
+
     printDegrees(degrees);
   
     return 0;
