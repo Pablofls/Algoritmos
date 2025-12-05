@@ -75,80 +75,19 @@ void printDegrees(vector<pair <int, int > > &degrees){
 
 }
 
-void findSchedules(vector<pair<int,int>>& degrees, unordered_map<int,int>& schedules, unordered_map<int, vector<int>>& classesGraph){
-    int hour = 0;
+void findSchedules(vector<pair <int, int > > & degrees, vector<pair <int, int > > &schedules){
+    //empezae con el primero de degrees y asignar horario
+    //verificar si el sigiuente tiene conexion
 
-    while (!degrees.empty()) {
 
-        // Lista de nodos a eliminar después del ciclo
-        vector<int> toRemove;
-
-        for (auto& p : degrees) {
-
-            int node = p.first;
-            
-
-            bool conflict = false;
-            // Revisar si es adyacente a algún nodo que ya tenga este horario
-            for (auto& entry : schedules) {
-                int paintedNode = entry.first;
-                int paintedHour = entry.second;
-
-                // Solo checar contra los que tengan este horario
-                if (paintedHour == hour) {
-                    // Verificar si "node" es vecino de "paintedNode"
-                    for (int neighbor : classesGraph[node]) {
-                        if (neighbor == paintedNode) {
-                            conflict = true;
-                            break;
-                        }
-                    }
-                }
-
-                if (conflict)
-                    break;
-            }
-
-            // Si no hubo conflicto, asignar horario al nodo
-            if (!conflict) {
-                schedules[node] = hour;
-                toRemove.push_back(node);
-            }
-        }
-
-        // Borrar los nodos asignados del vector degrees
-        for (int node : toRemove) {
-            degrees.erase(
-                remove_if(degrees.begin(),degrees.end(), [&](const pair<int,int>& p){ return p.first == node; }),
-                degrees.end()
-            );
-        }
-
-        hour++;
-    }
 }
 
-void printSchedules(unordered_map<int,int>& schedules) {
-    cout << "\nHorarios asignados (Welsh–Powell):\n";
-    cout << "Nodo  →  Horario\n";
-
-    // Convertir el mapa a vector para ordenarlo por nodo
-    vector<pair<int,int>> ordered;
-
-    for (auto& entry : schedules)
-        ordered.push_back(entry);
-
-    sort(ordered.begin(), ordered.end()); // ordena por clave (nodo)
-
-    for (auto& p : ordered)
-        cout << p.first << " → " << p.second << endl;
-}
 
 int main(){
 
     unordered_map<int, vector<int > > classesGraph;
-    unordered_map<int, int > schedules;
     vector<pair <int, int > > degrees;
+    vector<pair <int, int > > schedules;
 
     readfile(classesGraph);
     printMap(classesGraph);
@@ -160,9 +99,7 @@ int main(){
 
     printDegrees(degrees);
 
-    findSchedules(degrees, schedules, classesGraph);
-
-    printSchedules(schedules);
+    findSchedules(degrees, schedules);
 
 
   
@@ -182,5 +119,6 @@ C++ File Handling Read and Write to Csv Files - Kenny Yip Coding(2025). Youtube.
 
 GeeksforGeeks. (2024, February 19). How to Create a Vector of Pairs in C++? GeeksforGeeks. https://www.geeksforgeeks.org/cpp/how-to-create-vector-of-pairs-in-cpp/
 
+‌
 
 */
