@@ -72,17 +72,6 @@ void leerNombres(unordered_map<int, string>& grafoNombres) {
     nombres.close();
 }
 
-void imprimirGrafo(unordered_map<int, vector<int>>& grafoClases) {
-    for (auto& elemento : grafoClases) {
-        cout << elemento.first << " -> ";
-        cout << "(grado " << elemento.second.size() << ") ";
-        for (auto& vecino : elemento.second) {
-            cout << vecino << " ";
-        }
-        cout << endl;
-    }
-}
-
 void calcularGrados(unordered_map<int, vector<int>>& grafoClases, vector<pair<int, int>>& grados) {
     int nodo, grado;
     for (auto& elemento : grafoClases) {
@@ -90,11 +79,6 @@ void calcularGrados(unordered_map<int, vector<int>>& grafoClases, vector<pair<in
         grado = elemento.second.size();
         grados.push_back(make_pair(nodo, grado));
     }
-}
-
-void imprimirGrados(vector<pair<int, int>>& grados) {
-    for (int i = 0; i < (int)grados.size(); i++)
-        cout << grados[i].first << " " << grados[i].second << endl;
 }
 
 void asignarHorarios(vector<pair<int, int>>& grados, unordered_map<int, int>& horarios,unordered_map<int,vector<int>>& grafoClases) {
@@ -152,22 +136,6 @@ void asignarHorarios(vector<pair<int, int>>& grados, unordered_map<int, int>& ho
     }
 }
 
-void imprimirHorarios(unordered_map<int, int>& horarios) {
-    cout << "\nHorarios asignados (Welsh–Powell):\n";
-    cout << "Nodo  →  Horario\n";
-
-    // Pasar el mapa a vector para ordenarlo por nodo
-    vector<pair<int, int>> horariosOrdenados;
-
-    for (auto& parHorario : horarios)
-        horariosOrdenados.push_back(parHorario);
-
-    sort(horariosOrdenados.begin(), horariosOrdenados.end()); // ordena por nodo
-
-    for (auto& p : horariosOrdenados)
-        cout << p.first << " → " << p.second << endl;
-}
-
 void imprimirSolucion(unordered_map<int, vector<int>>& grafoClases,unordered_map<int, int>& horarios,unordered_map<int, string>& grafoNombres, ofstream&salida) {
     
     salida << "id" << "," << "nombre" << "," << "grado" << "," << "horario" << endl;
@@ -192,21 +160,19 @@ int main() {
 
     leerConflictos(grafoClases);
     leerNombres(grafoNombres);
-    imprimirGrafo(grafoClases);
+    
 
     calcularGrados(grafoClases, grados);
 
-    sort(grados.begin(), grados.end(),
-         [](const pair<int, int>& a, const pair<int, int>& b) {
-             return a.second > b.second;
-         });
-
-    imprimirGrados(grados);
+    sort(grados.begin(), grados.end(),[](const pair<int,int>& a, const pair<int,int>& b){
+         if (a.second != b.second)
+             return a.second > b.second;   
+         return a.first > b.first;         
+     });
 
     asignarHorarios(grados, horarios, grafoClases);
 
-    imprimirHorarios(horarios);
-
+    
     imprimirSolucion(grafoClases,horarios,grafoNombres,salida);
 
     return 0;
