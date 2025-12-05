@@ -1,186 +1,160 @@
-/*
-Engineering in Computer Technologies
-Analys and Design of Algotithms
-Pablo Flores 611194
-David Muñoz 621613
-December 5th, 2025
-*/
-
 #include <iostream>
 #include <string>
 #include <unordered_map>
 #include <vector>
-
-
-#include <iostream>
 #include <fstream>
 #include <sstream>
+#include <algorithm>
 
 using namespace std;
 
-void readfile(unordered_map<int, vector<int> >& classesGraph){
+void leerArchivo(unordered_map<int, vector<int>>& grafoClases) {
 
-    ifstream relations("conflictos.csv");
-    string line, sOrigin, sDestiny;
-    int origin, destiny;
+    ifstream relaciones("conflictos.csv");
+    string linea, sOrigen, sDestino;
+    int origen, destino;
 
-    getline(relations,line); //read the header of the csv file
+    getline(relaciones, linea); // leer encabezado del CSV
     
-    if(relations.is_open()){
-        while(getline(relations,line)){
-            stringstream ss(line); //stringstream is used to handle the string
-            
+    if (relaciones.is_open()) {
+        while (getline(relaciones, linea)) {
+            stringstream ss(linea);
 
-            getline(ss, sOrigin, ',');
-            getline(ss, sDestiny, ',');
+            getline(ss, sOrigen, ',');
+            getline(ss, sDestino, ',');
 
-            origin = stoi(sOrigin);
-            destiny = stoi(sDestiny);
+            origen = stoi(sOrigen);
+            destino = stoi(sDestino);
 
-            //do it twice so the conection between the nodes is in both vectorsss
-            classesGraph[origin].push_back(destiny);
-            classesGraph[destiny].push_back(origin);
+            // Conexión en ambos sentidos (grafo no dirigido)
+            grafoClases[origen].push_back(destino);
+            grafoClases[destino].push_back(origen);
         }
     }
 
-    relations.close();
-
+    relaciones.close();
 }
 
-void printMap(unordered_map<int, vector<int > >& classesGraph) {
-    for (auto& element : classesGraph) {
-        cout << element.first << " -> ";
-        cout << "(degree " << element.second.size() << ")";
-        for (auto& v : element.second) {
-            cout << v << " ";
+void imprimirGrafo(unordered_map<int, vector<int>>& grafoClases) {
+    for (auto& elemento : grafoClases) {
+        cout << elemento.first << " -> ";
+        cout << "(grado " << elemento.second.size() << ") ";
+        for (auto& vecino : elemento.second) {
+            cout << vecino << " ";
         }
         cout << endl;
     }
 }
 
-void degreeVector(unordered_map<int, vector<int > >& classesGraph,vector<pair <int, int > >& degrees){
-    int node, degree;
-    for (auto& element : classesGraph) {
-        node = element.first;
-        degree = element.second.size();
-        degrees.push_back(make_pair(node, degree));
+void calcularGrados(unordered_map<int, vector<int>>& grafoClases,
+                    vector<pair<int, int>>& grados) {
+    int nodo, grado;
+    for (auto& elemento : grafoClases) {
+        nodo = elemento.first;
+        grado = elemento.second.size();
+        grados.push_back(make_pair(nodo, grado));
     }
-
 }
 
-void printDegrees(vector<pair <int, int > > &degrees){
-     for (auto i : degrees)
-        cout << i.first << " " << i.second
-      	<< endl;
-
+void imprimirGrados(vector<pair<int, int>>& grados) {
+    for (int i = 0; i < (int)grados.size(); i++)
+        cout << grados[i].first << " " << grados[i].second << endl;
 }
 
-void findSchedules(vector<pair<int,int>>& degrees, unordered_map<int,int>& schedules, unordered_map<int, vector<int>>& classesGraph){
-    int hour = 0;
+void asignarHorarios(vector<pair<int, int>>& grados,
+                     unordered_map<int, int>& horarios,
+                     unordered_map<int, vector<int>>& grafoClases) {
+    int horario = 0;
 
-    while (!degrees.empty()) {
+    while (!grados.empty()) {
 
-        // Lista de nodos a eliminar después del ciclo
-        vector<int> toRemove;
+        // Nodos a eliminar después de esta pasada
+        vector<int> eliminados;
 
-        for (auto& p : degrees) {
+        for (int i = 0; i < (int)grados.size(); i++) {
 
-            int node = p.first;
-            
+            int nodo = grados[i].first;
+            bool hayConflicto = false;
 
-            bool conflict = false;
             // Revisar si es adyacente a algún nodo que ya tenga este horario
-            for (auto& entry : schedules) {
-                int paintedNode = entry.first;
-                int paintedHour = entry.second;
+            for (auto& parHorario : horarios) {
+                int nodoConHorario = parHorario.first;
+                int horarioAsignado = parHorario.second;
 
                 // Solo checar contra los que tengan este horario
-                if (paintedHour == hour) {
-                    // Verificar si "node" es vecino de "paintedNode"
-                    for (int neighbor : classesGraph[node]) {
-                        if (neighbor == paintedNode) {
-                            conflict = true;
+                if (horarioAsignado == horario) {
+                    // Verificar si "nodo" es vecino de "nodoConHorario"
+                    for (int vecino : grafoClases[nodo]) {
+                        if (vecino == nodoConHorario) {
+                            hayConflicto = true;
                             break;
                         }
                     }
                 }
 
-                if (conflict)
+                if (hayConflicto)
                     break;
             }
 
             // Si no hubo conflicto, asignar horario al nodo
-            if (!conflict) {
-                schedules[node] = hour;
-                toRemove.push_back(node);
+            if (!hayConflicto) {
+                horarios[nodo] = horario;
+                eliminados.push_back(nodo);
             }
         }
 
-        // Borrar los nodos asignados del vector degrees
-        for (int node : toRemove) {
-            degrees.erase(
-                remove_if(degrees.begin(),degrees.end(), [&](const pair<int,int>& p){ return p.first == node; }),
-                degrees.end()
-            );
+        // Borrar los nodos asignados del vector grados
+        for (int i = 0; i < (int)eliminados.size(); i++) {
+            int nodoEliminado = eliminados[i];
+            for (int j = 0; j < (int)grados.size(); j++) {
+                if (grados[j].first == nodoEliminado) {
+                    grados.erase(grados.begin() + j);
+                    j--; // ajustar índice tras erase
+                }
+            }
         }
 
-        hour++;
+        horario++;
     }
 }
 
-void printSchedules(unordered_map<int,int>& schedules) {
+void imprimirHorarios(unordered_map<int, int>& horarios) {
     cout << "\nHorarios asignados (Welsh–Powell):\n";
     cout << "Nodo  →  Horario\n";
 
-    // Convertir el mapa a vector para ordenarlo por nodo
-    vector<pair<int,int>> ordered;
+    // Pasar el mapa a vector para ordenarlo por nodo
+    vector<pair<int, int>> horariosOrdenados;
 
-    for (auto& entry : schedules)
-        ordered.push_back(entry);
+    for (auto& parHorario : horarios)
+        horariosOrdenados.push_back(parHorario);
 
-    sort(ordered.begin(), ordered.end()); // ordena por clave (nodo)
+    sort(horariosOrdenados.begin(), horariosOrdenados.end()); // ordena por nodo
 
-    for (auto& p : ordered)
+    for (auto& p : horariosOrdenados)
         cout << p.first << " → " << p.second << endl;
 }
 
-int main(){
+int main() {
 
-    unordered_map<int, vector<int > > classesGraph;
-    unordered_map<int, int > schedules;
-    vector<pair <int, int > > degrees;
+    unordered_map<int, vector<int>> grafoClases;
+    unordered_map<int, int> horarios;
+    vector<pair<int, int>> grados;
 
-    readfile(classesGraph);
-    printMap(classesGraph);
-    degreeVector(classesGraph,degrees);
+    leerArchivo(grafoClases);
+    imprimirGrafo(grafoClases);
 
-    sort(degrees.begin(), degrees.end(), [](const pair<int,int>& a, const pair<int,int>& b){
-        return a.second > b.second; 
-    });
+    calcularGrados(grafoClases, grados);
 
-    printDegrees(degrees);
+    sort(grados.begin(), grados.end(),
+         [](const pair<int, int>& a, const pair<int, int>& b) {
+             return a.second > b.second;
+         });
 
-    findSchedules(degrees, schedules, classesGraph);
+    imprimirGrados(grados);
 
-    printSchedules(schedules);
+    asignarHorarios(grados, horarios, grafoClases);
 
+    imprimirHorarios(horarios);
 
-  
     return 0;
 }
-
-
-/*
-We hereby affirm that we have done this activity with academic integrity.
-
-Referenceselement
-std::unordered_map - cppreference.com. (2025). Cppreference.com. https://cppreference.com/w/cpp/container/unordered_map.html
-
-GeeksforGeeks. (2024, February 14). How to Store Vectors as Values in a Map? GeeksforGeeks. https://www.geeksforgeeks.org/cpp/how-to-store-vectors-as-values-in-map-in-cpp/
-
-C++ File Handling Read and Write to Csv Files - Kenny Yip Coding(2025). Youtube.com. https://www.youtube.com/watch?v=LfiQj_X-pkA
-
-GeeksforGeeks. (2024, February 19). How to Create a Vector of Pairs in C++? GeeksforGeeks. https://www.geeksforgeeks.org/cpp/how-to-create-vector-of-pairs-in-cpp/
-
-
-*/
