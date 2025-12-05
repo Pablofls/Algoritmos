@@ -16,6 +16,7 @@ December 5th, 2025
 
 using namespace std;
 
+//funcion para leer el archivo de conflictos y llenar el mapa de vectores de acuerdo a las relaciones
 void leerConflictos(unordered_map<int, vector<int>>& grafoClases) {
 
     ifstream relaciones("conflictos.csv");
@@ -26,7 +27,7 @@ void leerConflictos(unordered_map<int, vector<int>>& grafoClases) {
     
     if (relaciones.is_open()) {
         while (getline(relaciones, linea)) {
-            stringstream ss(linea);
+            stringstream ss(linea); //uso de stringstream para el manejo de strings
 
             getline(ss, sOrigen, ',');
             getline(ss, sDestino, ',');
@@ -43,6 +44,7 @@ void leerConflictos(unordered_map<int, vector<int>>& grafoClases) {
     relaciones.close();
 }
 
+//funcion para leer el archivo con los nombres de las materias y llenar el grafoNombres que sirvirá como diccionario
 void leerNombres(unordered_map<int, string>& grafoNombres) {
 
     ifstream nombres("nombres.csv");
@@ -58,6 +60,7 @@ void leerNombres(unordered_map<int, string>& grafoNombres) {
             getline(ss, sId, ',');
             getline(ss, nombre);
 
+            //elminiar basura del string cuando se ee cada lineas
             if (!nombre.empty() && nombre.back() == '\r') {
                 nombre.pop_back();
             }
@@ -72,6 +75,7 @@ void leerNombres(unordered_map<int, string>& grafoNombres) {
     nombres.close();
 }
 
+//funcion para calcular el grado de cada nodo y almacenarlo en un nuevo vector para poder acomodar por grado 
 void calcularGrados(unordered_map<int, vector<int>>& grafoClases, vector<pair<int, int>>& grados) {
     int nodo, grado;
     for (auto& elemento : grafoClases) {
@@ -136,6 +140,7 @@ void asignarHorarios(vector<pair<int, int>>& grados, unordered_map<int, int>& ho
     }
 }
 
+//imprimir solucion en un archivo de salida.
 void imprimirSolucion(unordered_map<int, vector<int>>& grafoClases,unordered_map<int, int>& horarios,unordered_map<int, string>& grafoNombres, ofstream&salida) {
     
     salida << "id" << "," << "nombre" << "," << "grado" << "," << "horario" << endl;
@@ -175,6 +180,7 @@ int main() {
     
     imprimirSolucion(grafoClases,horarios,grafoNombres,salida);
 
+     salida.close();
     return 0;
 }
 
@@ -182,14 +188,19 @@ int main() {
 /*
 We hereby affirm that we have done this activity with academic integrity.
 
-Referenceselement
+References
 std::unordered_map - cppreference.com. (2025). Cppreference.com. https://cppreference.com/w/cpp/container/unordered_map.html
 
+GeeksforGeeks. (2016, March 24). Unordered Map in C++ STL. GeeksforGeeks. https://www.geeksforgeeks.org/cpp/unordered_map-in-cpp-stl/
+
 GeeksforGeeks. (2024, February 14). How to Store Vectors as Values in a Map? GeeksforGeeks. https://www.geeksforgeeks.org/cpp/how-to-store-vectors-as-values-in-map-in-cpp/
+
+GeeksforGeeks. (2024, February 19). How to Create a Vector of Pairs in C++? GeeksforGeeks. https://www.geeksforgeeks.org/cpp/how-to-create-vector-of-pairs-in-cpp/
+
+GeeksforGeeks. (2024, July 23). How to Sort a Vector of Pairs Based on the Second Element of the Pair in C++? GeeksforGeeks. https://www.geeksforgeeks.org/cpp/sort-a-vector-of-pairs-based-on-second-element-of-pair-in-cpp/
 
 C++ File Handling Read and Write to Csv Files - Kenny Yip Coding(2025). Youtube.com. https://www.youtube.com/watch?v=LfiQj_X-pkA
 
 GeeksforGeeks. (2024, February 19). How to Create a Vector of Pairs in C++? GeeksforGeeks. https://www.geeksforgeeks.org/cpp/how-to-create-vector-of-pairs-in-cpp/
-
 
 */
