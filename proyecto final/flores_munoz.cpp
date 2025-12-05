@@ -1,9 +1,8 @@
 /*
-Engineering in Computer Technologies
-Analys and Design of Algotithms
+Ingeniería en Tecnologías Computacionales
 Pablo Flores 611194
 David Muñoz 621613
-December 5th, 2025
+5 de diciembre, 2025
 */
 
 #include <iostream>
@@ -85,12 +84,16 @@ void calcularGrados(unordered_map<int, vector<int>>& grafoClases, vector<pair<in
     }
 }
 
+//funcion para ordenar por mayor grado
+bool compararPorGrado(const pair<int,int>& a, const pair<int,int>& b) {
+    return a.second > b.second;   
+}
+
 void asignarHorarios(vector<pair<int, int>>& grados, unordered_map<int, int>& horarios,unordered_map<int,vector<int>>& grafoClases) {
     int horario = 0;
 
     while (!grados.empty()) {
 
-        // Nodos a eliminar después de esta pasada
         vector<int> eliminados;
 
         for (int i = 0; i < (int)grados.size(); i++) {
@@ -98,7 +101,7 @@ void asignarHorarios(vector<pair<int, int>>& grados, unordered_map<int, int>& ho
             int nodo = grados[i].first;
             bool hayConflicto = false;
 
-            // Revisar si es adyacente a algún nodo que ya tenga este horario
+            // Revisar si hay conflicto con algún nodo que ya tenga este horario
             for (auto& parHorario : horarios) {
                 int nodoConHorario = parHorario.first;
                 int horarioAsignado = parHorario.second;
@@ -171,11 +174,7 @@ int main() {
 
     calcularGrados(grafoClases, grados);
 
-    sort(grados.begin(), grados.end(),[](const pair<int,int>& a, const pair<int,int>& b){
-         if (a.second != b.second)
-             return a.second > b.second;   
-         return a.first > b.first;         
-     });
+    sort(grados.begin(), grados.end(), compararPorGrado);
 
     asignarHorarios(grados, horarios, grafoClases);
 
@@ -188,7 +187,15 @@ int main() {
          
 
 /*
-We hereby affirm that we have done this activity with academic integrity.
+Complejidad temporal
+O(n^3) donde n = al numero de nodos en el vector de grados, ya que en la función de asignar horarios por cada nodo dentro del vector de grados se verifica primero los nodos sin horario, después los nodos asignados y luego los vecinos
+
+Complejidad espacial
+O(n + c) donde n es el numero de nodos y c el numero de conflictos.
+
+
+
+Nosotros damos nuestra palabra que hemos realizado esta actividad con integridad académica.
 
 References
 std::unordered_map - cppreference.com. (2025). Cppreference.com. https://cppreference.com/w/cpp/container/unordered_map.html
