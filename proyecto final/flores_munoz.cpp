@@ -16,6 +16,7 @@ December 5th, 2025
 
 using namespace std;
 
+//funcion para leer el archivo de conflictos y llenar el mapa de vectores de acuerdo a las relaciones
 void leerConflictos(unordered_map<int, vector<int>>& grafoClases) {
 
     ifstream relaciones("conflictos.csv");
@@ -26,7 +27,7 @@ void leerConflictos(unordered_map<int, vector<int>>& grafoClases) {
     
     if (relaciones.is_open()) {
         while (getline(relaciones, linea)) {
-            stringstream ss(linea);
+            stringstream ss(linea); //uso de stringstream para el manejo de strings
 
             getline(ss, sOrigen, ',');
             getline(ss, sDestino, ',');
@@ -43,6 +44,7 @@ void leerConflictos(unordered_map<int, vector<int>>& grafoClases) {
     relaciones.close();
 }
 
+//funcion para leer el archivo con los nombres de las materias y llenar el grafoNombres que sirvirá como diccionario
 void leerNombres(unordered_map<int, string>& grafoNombres) {
 
     ifstream nombres("nombres.csv");
@@ -58,6 +60,7 @@ void leerNombres(unordered_map<int, string>& grafoNombres) {
             getline(ss, sId, ',');
             getline(ss, nombre);
 
+            //elminiar basura del string cuando se ee cada lineas
             if (!nombre.empty() && nombre.back() == '\r') {
                 nombre.pop_back();
             }
@@ -72,17 +75,7 @@ void leerNombres(unordered_map<int, string>& grafoNombres) {
     nombres.close();
 }
 
-void imprimirGrafo(unordered_map<int, vector<int>>& grafoClases) {
-    for (auto& elemento : grafoClases) {
-        cout << elemento.first << " -> ";
-        cout << "(grado " << elemento.second.size() << ") ";
-        for (auto& vecino : elemento.second) {
-            cout << vecino << " ";
-        }
-        cout << endl;
-    }
-}
-
+//funcion para calcular el grado de cada nodo y almacenarlo en un nuevo vector para poder acomodar por grado 
 void calcularGrados(unordered_map<int, vector<int>>& grafoClases, vector<pair<int, int>>& grados) {
     int nodo, grado;
     for (auto& elemento : grafoClases) {
@@ -90,11 +83,6 @@ void calcularGrados(unordered_map<int, vector<int>>& grafoClases, vector<pair<in
         grado = elemento.second.size();
         grados.push_back(make_pair(nodo, grado));
     }
-}
-
-void imprimirGrados(vector<pair<int, int>>& grados) {
-    for (int i = 0; i < (int)grados.size(); i++)
-        cout << grados[i].first << " " << grados[i].second << endl;
 }
 
 void asignarHorarios(vector<pair<int, int>>& grados, unordered_map<int, int>& horarios,unordered_map<int,vector<int>>& grafoClases) {
@@ -117,7 +105,8 @@ void asignarHorarios(vector<pair<int, int>>& grados, unordered_map<int, int>& ho
 
                 // Solo checar contra los que tengan este horario
                 if (horarioAsignado == horario) {
-                    // Verificar si "nodo" es vecino de "nodoConHorario"
+
+                    //checar si hay conflicto entre el nodo actual y los que ya tienen horario asignado
                     for (int vecino : grafoClases[nodo]) {
                         if (vecino == nodoConHorario) {
                             hayConflicto = true;
@@ -126,24 +115,25 @@ void asignarHorarios(vector<pair<int, int>>& grados, unordered_map<int, int>& ho
                     }
                 }
 
+                //salir del ciclo si hubo conflicto para no asignarle horario
                 if (hayConflicto)
                     break;
             }
 
-            // Si no hubo conflicto, asignar horario al nodo
+            // asignar horario si no hubo conflicto
             if (!hayConflicto) {
                 horarios[nodo] = horario;
                 eliminados.push_back(nodo);
             }
         }
 
-        // Borrar los nodos asignados del vector grados
+        // Borrar los nodos que ya tienen horario definido
         for (int i = 0; i < (int)eliminados.size(); i++) {
             int nodoEliminado = eliminados[i];
             for (int j = 0; j < (int)grados.size(); j++) {
                 if (grados[j].first == nodoEliminado) {
                     grados.erase(grados.begin() + j);
-                    j--; // ajustar índice tras erase
+                    j--; 
                 }
             }
         }
@@ -152,22 +142,7 @@ void asignarHorarios(vector<pair<int, int>>& grados, unordered_map<int, int>& ho
     }
 }
 
-void imprimirHorarios(unordered_map<int, int>& horarios) {
-    cout << "\nHorarios asignados (Welsh–Powell):\n";
-    cout << "Nodo  →  Horario\n";
-
-    // Pasar el mapa a vector para ordenarlo por nodo
-    vector<pair<int, int>> horariosOrdenados;
-
-    for (auto& parHorario : horarios)
-        horariosOrdenados.push_back(parHorario);
-
-    sort(horariosOrdenados.begin(), horariosOrdenados.end()); // ordena por nodo
-
-    for (auto& p : horariosOrdenados)
-        cout << p.first << " → " << p.second << endl;
-}
-
+//imprimir solucion en un archivo de salida.
 void imprimirSolucion(unordered_map<int, vector<int>>& grafoClases,unordered_map<int, int>& horarios,unordered_map<int, string>& grafoNombres, ofstream&salida) {
     
     salida << "id" << "," << "nombre" << "," << "grado" << "," << "horario" << endl;
@@ -192,38 +167,42 @@ int main() {
 
     leerConflictos(grafoClases);
     leerNombres(grafoNombres);
-    imprimirGrafo(grafoClases);
+    
 
     calcularGrados(grafoClases, grados);
 
-    sort(grados.begin(), grados.end(),
-         [](const pair<int, int>& a, const pair<int, int>& b) {
-             return a.second > b.second;
-         });
-
-    imprimirGrados(grados);
+    sort(grados.begin(), grados.end(),[](const pair<int,int>& a, const pair<int,int>& b){
+         if (a.second != b.second)
+             return a.second > b.second;   
+         return a.first > b.first;         
+     });
 
     asignarHorarios(grados, horarios, grafoClases);
 
-    imprimirHorarios(horarios);
-
+    
     imprimirSolucion(grafoClases,horarios,grafoNombres,salida);
 
+     salida.close();
     return 0;
 }
-
+         
 
 /*
 We hereby affirm that we have done this activity with academic integrity.
 
-Referenceselement
+References
 std::unordered_map - cppreference.com. (2025). Cppreference.com. https://cppreference.com/w/cpp/container/unordered_map.html
 
+GeeksforGeeks. (2016, March 24). Unordered Map in C++ STL. GeeksforGeeks. https://www.geeksforgeeks.org/cpp/unordered_map-in-cpp-stl/
+
 GeeksforGeeks. (2024, February 14). How to Store Vectors as Values in a Map? GeeksforGeeks. https://www.geeksforgeeks.org/cpp/how-to-store-vectors-as-values-in-map-in-cpp/
+
+GeeksforGeeks. (2024, February 19). How to Create a Vector of Pairs in C++? GeeksforGeeks. https://www.geeksforgeeks.org/cpp/how-to-create-vector-of-pairs-in-cpp/
+
+GeeksforGeeks. (2024, July 23). How to Sort a Vector of Pairs Based on the Second Element of the Pair in C++? GeeksforGeeks. https://www.geeksforgeeks.org/cpp/sort-a-vector-of-pairs-based-on-second-element-of-pair-in-cpp/
 
 C++ File Handling Read and Write to Csv Files - Kenny Yip Coding(2025). Youtube.com. https://www.youtube.com/watch?v=LfiQj_X-pkA
 
 GeeksforGeeks. (2024, February 19). How to Create a Vector of Pairs in C++? GeeksforGeeks. https://www.geeksforgeeks.org/cpp/how-to-create-vector-of-pairs-in-cpp/
-
 
 */
